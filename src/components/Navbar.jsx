@@ -90,7 +90,7 @@ function Navbar() {
           </Menu>
         ) : (
           <Button colorScheme="pink">
-            <Link to="/login">Login</Link>
+            <Link to="/login">Log In</Link>
           </Button>
         )}
       </Stack>

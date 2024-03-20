@@ -29,7 +29,7 @@ import {
 
 import { AddIcon } from '@chakra-ui/icons';
 
-function AddCamerasOverlay({ userId }) {
+function AddCamerasOverlay({ userId, getCameras }) {
   const [brand, setBrand] = useState('');
   const [name, setName] = useState('');
   const [format, setFormat] = useState('');
@@ -71,6 +71,7 @@ function AddCamerasOverlay({ userId }) {
       await addCamera(requestBody);
 
       navigate(`/users/${user._id}`);
+      getCameras();
       handleCloseModal();
     } catch (error) {
       console.log(error);

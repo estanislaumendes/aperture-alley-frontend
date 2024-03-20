@@ -26,8 +26,16 @@ export const getCamera = id => {
   return axios.get(`${baseURL}/cameras/${id}`);
 };
 
+export const getUserCamera = userId => {
+  return axios.get(`${baseURL}/cameras/users/${userId}`);
+};
+
 export const addCamera = camera => {
   return axios.post(`${baseURL}/cameras`, camera);
+};
+
+export const updateCamera = updatedCamera => {
+  return axios.put(`${baseURL}/cameras/${updatedCamera._id}`, updatedCamera);
 };
 
 export const getUser = id => {
