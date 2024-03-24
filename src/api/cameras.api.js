@@ -38,6 +38,10 @@ export const updateCamera = updatedCamera => {
   return axios.put(`${baseURL}/cameras/${updatedCamera._id}`, updatedCamera);
 };
 
+export const deleteCamera = id => {
+  return axios.delete(`${baseURL}/cameras/${id}`);
+};
+
 export const getUser = id => {
   return axios.get(`${baseURL}/users/${id}`);
 };

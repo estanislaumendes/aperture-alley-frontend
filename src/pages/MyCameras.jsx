@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getUserCamera } from '../api/cameras.api';
 import AddCamerasOverlay from './AddCamerasOverlay';
+import DeleteCamerasDialog from './DeleteCamerasDialog';
 
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -17,6 +18,7 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
+import EditCamerasOverlay from './EditCamerasOverlay';
 
 function MyCameras() {
   const { user } = useContext(AuthContext);
@@ -82,15 +84,25 @@ function MyCameras() {
                         <Text color="blue.600" fontSize="2xl">
                           €{camera.price}
                         </Text>
-                        <Tooltip label="Send a message" fontSize="sm">
-                          <Button
-                            borderRadius="50%"
-                            variant="solid"
-                            colorScheme="messenger"
-                          >
-                            <ChatIcon />
-                          </Button>
-                        </Tooltip>
+                        <Flex spacing="1" justify="flex-end">
+                          <Tooltip label="Send a message" fontSize="sm">
+                            <Button
+                              borderRadius="50%"
+                              variant="ghost"
+                              colorScheme="messenger"
+                            >
+                              <ChatIcon />
+                            </Button>
+                          </Tooltip>
+                          <EditCamerasOverlay
+                            cameraId={camera._id}
+                            getCameras={getCameras}
+                          />
+                          <DeleteCamerasDialog
+                            cameraId={camera._id}
+                            getCameras={getCameras}
+                          />
+                        </Flex>
                       </Flex>
                     </Stack>
                   </CardBody>
