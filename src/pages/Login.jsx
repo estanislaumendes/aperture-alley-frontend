@@ -10,12 +10,16 @@ import {
   Button,
   FormControl,
   FormLabel,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
@@ -52,28 +56,42 @@ const Login = () => {
         >
           <Heading mb={6}>Log In</Heading>
           <Input
-            placeholder="johndoe@gmail.com"
+            placeholder="Email"
             type="email"
             variant="filled"
             mb={3}
             isRequired
             onChange={e => setEmail(e.target.value)}
           />
-          <Input
-            placeholder="**********"
-            type="password"
-            variant="filled"
-            mb={6}
-            isRequired
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <InputGroup size="md">
+            <Input
+              placeholder="Password"
+              type={show ? 'text' : 'password'}
+              variant="filled"
+              mb={6}
+              isRequired
+              onChange={e => setPassword(e.target.value)}
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
           <Button type="submit" colorScheme="pink" mb={8}>
             Log In
           </Button>
           {error && <p>{error}</p>}
-          <FormControl display="flex" alignItems="center">
+          <FormControl
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <FormLabel htmlFor="signup" mb="0">
-              New to us? <Link to={'/signup'}>Signup</Link>
+              New to us?{' '}
+              <Button colorScheme="pink" variant="link">
+                <Link to={'/signup'}>Signup</Link>
+              </Button>
             </FormLabel>
           </FormControl>
         </Flex>

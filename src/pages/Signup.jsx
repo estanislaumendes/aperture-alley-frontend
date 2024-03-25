@@ -2,6 +2,17 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../api/auth.api';
 
+import {
+  Flex,
+  Heading,
+  Input,
+  Button,
+  FormControl,
+  FormLabel,
+  InputGroup,
+  InputRightElement,
+} from '@chakra-ui/react';
+
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,6 +21,8 @@ const Signup = () => {
   const [phoneNr, setPhoneNr] = useState('');
   const [cameras, setCameras] = useState([]);
   const [error, setError] = useState(null);
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   const navigate = useNavigate();
 
@@ -30,54 +43,91 @@ const Signup = () => {
 
   return (
     <div>
-      <h1>Sign up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
+      <Flex h="100vh" alignItems="center" justifyContent="center">
+        <Flex
+          as="form"
+          flexDirection="column"
+          p={12}
+          borderRadius={8}
+          boxShadow="lg"
+          onSubmit={handleSubmit}
+          w="auto"
+        >
+          <Heading mb={6}>Sign up</Heading>
 
-        <label>Password</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-        />
+          <Input
+            placeholder="First Name"
+            type="text"
+            variant="filled"
+            mb={3}
+            isRequired
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+          <Input
+            placeholder="Last Name"
+            type="text"
+            variant="filled"
+            mb={3}
+            isRequired
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+          />
 
-        <label>First Name</label>
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={({ target }) => setFirstName(target.value)}
-        />
+          <Input
+            placeholder="Phone Number"
+            type="number"
+            variant="filled"
+            mb={10}
+            isRequired
+            value={phoneNr}
+            onChange={e => setPhoneNr(e.target.value)}
+          />
 
-        <label>Last Name</label>
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={({ target }) => setLastName(target.value)}
-        />
+          <Input
+            placeholder="Email"
+            type="email"
+            variant="filled"
+            mb={3}
+            isRequired
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
 
-        <label>Phone</label>
-        <input
-          type="text"
-          name="phoneNr"
-          value={phoneNr}
-          onChange={({ target }) => setPhoneNr(target.value)}
-        />
+          <InputGroup size="md">
+            <Input
+              placeholder="Password"
+              type={show ? 'text' : 'password'}
+              variant="filled"
+              mb={6}
+              isRequired
+              onChange={e => setPassword(e.target.value)}
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? 'Hide' : 'Show'}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          <Button colorScheme="pink" type="submit">
+            Sign Up
+          </Button>
 
-        <button type="submit">Sign Up</button>
-      </form>
-
-      {error && <p>{error}</p>}
-      <p>Already have an account?</p>
-      <Link to="/login">Login</Link>
+          {error && <p>{error}</p>}
+          <FormControl
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <FormLabel htmlFor="login" mb="0">
+              Already have an account?{' '}
+              <Button colorScheme="pink" variant="link">
+                <Link to="/login">Login</Link>
+              </Button>
+            </FormLabel>
+          </FormControl>
+        </Flex>
+      </Flex>
     </div>
   );
 };
