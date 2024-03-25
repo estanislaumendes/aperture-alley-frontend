@@ -5,7 +5,7 @@ import { getAllCameras } from '../api/cameras.api';
 import { AuthContext } from '../context/auth.context';
 import {
   HStack,
-  useColorMode,
+  useColorModeValue,
   Flex,
   Heading,
   Stack,
@@ -21,7 +21,6 @@ import { ChatIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
 
 function Home() {
-  const { toggleColorMode } = useColorMode();
   const { user } = useContext(AuthContext);
   const [cameras, setCameras] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -93,7 +92,10 @@ function Home() {
                         <Text as="sup">{camera.model}</Text>
                         <Text>Condition: {camera.condition} </Text>
                         <Flex justify="space-between">
-                          <Text color="blue.600" fontSize="2xl">
+                          <Text
+                            color={useColorModeValue('blue.600', 'pink.200')}
+                            fontSize="2xl"
+                          >
                             €{camera.price}
                           </Text>
                           <Tooltip label="Send a message" fontSize="sm">
