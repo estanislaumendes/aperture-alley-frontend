@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Banner from '../components/Banner';
 import { getUserCamera } from '../api/cameras.api';
 import AddCamerasOverlay from './AddCamerasOverlay';
 import DeleteCamerasDialog from './DeleteCamerasDialog';
@@ -9,7 +10,6 @@ import {
   Flex,
   Heading,
   Stack,
-  Highlight,
   Card,
   CardBody,
   Button,
@@ -40,26 +40,7 @@ function MyCameras() {
 
   return (
     <>
-      <Flex
-        h="200px"
-        align="center"
-        bgGradient="linear(to-l, #FF0080, #7928CA)"
-      >
-        <Stack p="20px">
-          <Heading size="lg" lineHeight="tall" color="white">
-            <Highlight
-              query={['Buy', 'sell', 'trade']}
-              styles={{ py: '1', color: 'yellow.300' }}
-            >
-              Buy, sell or trade used cameras
-            </Highlight>
-          </Heading>
-          <Heading size="sm" color="white">
-            Shop for all the used cameras you need. Message directly and get a
-            deal with sellers
-          </Heading>
-        </Stack>
-      </Flex>
+      <Banner />
       <Stack p="20px">
         <AddCamerasOverlay userId={user._id} getCameras={getCameras} />
 
@@ -67,7 +48,12 @@ function MyCameras() {
           <Flex mt="6" gap="2" flexWrap="wrap" justifyContent="flex-start">
             {cameras.map(camera => {
               return (
-                <Card key={camera._id} maxW="sm" shadow="md">
+                <Card
+                  key={camera._id}
+                  maxW="sm"
+                  shadow="md"
+                  _hover={{ shadow: '2xl' }}
+                >
                   <CardBody>
                     <Image
                       src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"

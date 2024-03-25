@@ -1,17 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+
+import Banner from '../components/Banner';
 import { getAllCameras } from '../api/cameras.api';
-import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
 import {
+  HStack,
   useColorMode,
   Flex,
   Heading,
   Stack,
-  Highlight,
-  Tooltip,
-  CardBody,
   Card,
+  CardBody,
   Button,
+  Image,
+  Text,
+  Tooltip,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 
@@ -19,6 +23,10 @@ function Home() {
   const { toggleColorMode } = useColorMode();
   const { user } = useContext(AuthContext);
   const [cameras, setCameras] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 6; // Number of items to display per page
+  const totalPages = Math.ceil(cameras.length / itemsPerPage);
 
   const getCameras = async () => {
     try {
@@ -31,39 +39,40 @@ function Home() {
   };
 
   useEffect(() => {
-    getAllCameras();
+    getCameras();
   }, []);
+
+  const handleNextPage = () => {
+    setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const visibleCameras = cameras.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageClick = pageNumber => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <>
-      <Flex
-        h="200px"
-        align="center"
-        bgGradient="linear(to-l, #FF0080, #7928CA)"
-      >
-        <Stack p="20px">
-          <Heading size="lg" lineHeight="tall" color="white">
-            <Highlight
-              query={['Buy', 'sell', 'trade']}
-              styles={{ py: '1', color: 'yellow.300' }}
-            >
-              Buy, sell or trade used cameras
-            </Highlight>
-          </Heading>
-          <Heading size="sm" color="white">
-            Shop for all the used cameras you need. Message directly and get a
-            deal with sellers
-          </Heading>
-        </Stack>
-      </Flex>
+      <Banner />
 
       <Stack p="20px">
         <Heading size="md">Latest additions</Heading>
         <Stack ml="30" mr="30">
-          <Flex mt="6" gap="2" flexWrap="wrap" justifyContent="flex-start">
-            {cameras.map(camera => {
+          <SimpleGrid columns={3} p="5" spacing={4} overflowX="visible">
+            {visibleCameras.map(camera => {
               return (
-                <Card key={camera._id} maxW="sm" shadow="md">
+                <Card
+                  key={camera._id}
+                  maxW="sm"
+                  shadow="md"
+                  _hover={{ shadow: '2xl' }}
+                >
                   <CardBody>
                     <Image
                       src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
@@ -83,7 +92,7 @@ function Home() {
                         <Tooltip label="Send a message" fontSize="sm">
                           <Button
                             borderRadius="50%"
-                            variant="solid"
+                            variant="ghost"
                             colorScheme="messenger"
                           >
                             <ChatIcon />
@@ -95,7 +104,25 @@ function Home() {
                 </Card>
               );
             })}
-          </Flex>
+          </SimpleGrid>
+          <HStack mt={4} spacing={4} justifyContent="center">
+            {currentPage !== 1 && (
+              <Button onClick={handlePrevPage}>Previous</Button>
+            )}
+            {[...Array(totalPages)].map((_, index) => (
+              <Button
+                key={index}
+                onClick={() => handlePageClick(index + 1)}
+                variant={currentPage === index + 1 ? 'solid' : 'outline'}
+                colorScheme={currentPage === index + 1 ? 'pink' : 'gray'}
+              >
+                {index + 1}
+              </Button>
+            ))}
+            {currentPage !== totalPages && (
+              <Button onClick={handleNextPage}>Next</Button>
+            )}
+          </HStack>
         </Stack>
       </Stack>
     </>

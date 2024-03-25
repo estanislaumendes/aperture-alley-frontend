@@ -33,7 +33,7 @@ function Navbar() {
       align="center"
       justify="space-between"
       bg="#1A365D"
-      p={[0, 3, 15]}
+      pr={[0, 3, 15]}
     >
       <HStack direction="row" p="10px">
         <NavLink to="/">
