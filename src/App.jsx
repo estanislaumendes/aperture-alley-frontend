@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import IsPrivate from './components/isPrivate';
 import IsAnon from './components/isAnon';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           }
         />
       </Routes>
+      <Footer />
     </>
   );
 }
