@@ -45,3 +45,7 @@ export const deleteCamera = id => {
 export const getUser = id => {
   return axios.get(`${baseURL}/users/${id}`);
 };
+
+export const upload = image => {
+  return axios.post(`${baseURL}/upload`, image);
+};

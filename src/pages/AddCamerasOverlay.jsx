@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addCamera } from '../api/cameras.api';
+import { addCamera, upload } from '../api/cameras.api';
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
 import {
@@ -60,13 +60,25 @@ function AddCamerasOverlay({ userId, getCameras }) {
         price,
         model,
         condition,
-        img,
         whatsIncluded,
         isSelling,
         wasSold,
         location,
         user: userId,
       };
+
+      if (img.length > 0) {
+        const uploadData = new FormData();
+
+        // Append each image to the FormData
+        img.forEach((image, index) => {
+          uploadData.append('files', image);
+        });
+        const response = await upload(uploadData);
+        console.log(response.data);
+
+        requestBody.img = response.data.img;
+      }
 
       await addCamera(requestBody);
 
@@ -76,6 +88,12 @@ function AddCamerasOverlay({ userId, getCameras }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleImages = ({ target }) => {
+    // Convert FileList to Array
+    const filesArray = Array.from(target.files);
+    setImg(filesArray);
   };
 
   return (
@@ -141,6 +159,12 @@ function AddCamerasOverlay({ userId, getCameras }) {
                 <FormControl isRequired>
                   <FormLabel>Model</FormLabel>
                   <Input onChange={e => setModel(e.target.value)} />
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel>Images</FormLabel>
+                  <Input type="file" multiple onChange={handleImages} />
+                  <FormHelperText>max = 5</FormHelperText>
                 </FormControl>
 
                 <FormControl isRequired>
