@@ -7,6 +7,7 @@ import Signup from './pages/Signup';
 import IsPrivate from './components/isPrivate';
 import IsAnon from './components/isAnon';
 import Footer from './components/Footer';
+import CameraDetails from './pages/CameraDetails';
 
 function App() {
   return (
@@ -20,6 +21,15 @@ function App() {
           element={
             <IsPrivate>
               <MyCameras />
+            </IsPrivate>
+          }
+        />
+
+        <Route
+          path="/cameras/:cameraId"
+          element={
+            <IsPrivate>
+              <CameraDetails />
             </IsPrivate>
           }
         />
