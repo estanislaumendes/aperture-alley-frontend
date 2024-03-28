@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { getCamera } from '../api/cameras.api';
 import { getUser } from '../api/cameras.api';
 import Banner from '../components/Banner';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import {
   Flex,
@@ -26,7 +28,20 @@ function CameraDetails() {
   const [camera, setCamera] = useState(null);
   const [user, setUser] = useState(null);
   const [timeAgo, setTimeAgo] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { cameraId } = useParams();
+
+  const navigateToPreviousImage = () => {
+    setCurrentImageIndex(prevIndex =>
+      prevIndex === 0 ? camera.img.length - 1 : prevIndex - 1
+    );
+  };
+
+  const navigateToNextImage = () => {
+    setCurrentImageIndex(prevIndex =>
+      prevIndex === camera.img.length - 1 ? 0 : prevIndex + 1
+    );
+  };
 
   const getSingleCamera = async () => {
     try {
@@ -92,26 +107,41 @@ function CameraDetails() {
     <>
       <Banner />
       <Stack ml="30" mr="30">
-        <Container maxW={'7xl'}>
-          <SimpleGrid
-            columns={{ base: 1, lg: 2 }}
-            spacing={{ base: 8, md: 10 }}
-            py={{ base: 18, md: 24 }}
-          >
-            {camera && user && (
+        {camera && user && (
+          <Container maxW={'7xl'}>
+            <SimpleGrid
+              columns={{ base: 1, lg: 2 }}
+              spacing={{ base: 8, md: 10 }}
+              py={{ base: 18, md: 24 }}
+            >
               <>
-                <Flex>
+                <Flex direction="column">
                   <Image
                     rounded={'md'}
                     alt={'product image'}
-                    src={
-                      'https://images.unsplash.com/photo-1596516109370-29001ec8ec36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODE1MDl8MHwxfGFsbHx8fHx8fHx8fDE2Mzg5MzY2MzE&ixlib=rb-1.2.1&q=80&w=1080'
-                    }
+                    src={camera.img[currentImageIndex]}
                     fit={'cover'}
                     align={'center'}
                     w={'100%'}
                     h={{ base: '100%', sm: '400px', lg: '500px' }}
                   />
+                  {/* Navigation Buttons */}
+                  <Stack direction="row" justifyContent="center" mt={4}>
+                    <Button variant="link" onClick={navigateToPreviousImage}>
+                      <FontAwesomeIcon
+                        icon={faArrowLeft}
+                        size="xl"
+                        style={{ color: '#e41f8c' }}
+                      />
+                    </Button>
+                    <Button variant="link" onClick={navigateToNextImage}>
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        size="xl"
+                        style={{ color: '#e41f8c' }}
+                      />
+                    </Button>
+                  </Stack>
                 </Flex>
                 <Stack spacing={{ base: 6, md: 5 }}>
                   <Box as={'header'}>
@@ -207,9 +237,9 @@ function CameraDetails() {
                   </Stack>
                 </Stack>
               </>
-            )}
-          </SimpleGrid>
-        </Container>
+            </SimpleGrid>
+          </Container>
+        )}
       </Stack>
     </>
   );

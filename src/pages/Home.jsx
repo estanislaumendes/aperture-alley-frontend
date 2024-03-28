@@ -94,27 +94,27 @@ function Home() {
                     }}
                   >
                     {camera && (
-                      <Link to={`/cameras/${camera._id}`}>
-                        <Card
-                          key={camera._id}
-                          maxW="sm"
-                          shadow="md"
-                          background={useColorModeValue(
-                            'gray.50',
-                            'blackalpha.700'
-                          )}
-                          _hover={{ shadow: '2xl' }}
-                        >
-                          <CardBody>
-                            <Box
-                              key={camera._id}
-                              width="300px"
-                              height="300px"
-                              overflow="hidden"
-                              position="relative"
-                            >
-                              <ImageCarousel camera={camera} />
-                            </Box>
+                      <Card
+                        key={camera._id}
+                        maxW="sm"
+                        shadow="md"
+                        background={useColorModeValue(
+                          'gray.50',
+                          'blackalpha.700'
+                        )}
+                        _hover={{ shadow: '2xl' }}
+                      >
+                        <CardBody>
+                          <Box
+                            key={camera._id}
+                            width="300px"
+                            height="300px"
+                            overflow="hidden"
+                            position="relative"
+                          >
+                            <ImageCarousel camera={camera} />
+                          </Box>
+                          <Link to={`/cameras/${camera._id}`}>
                             <Stack mt="6" spacing="3">
                               <Heading size="md">
                                 {camera.brand} {camera.name}
@@ -144,9 +144,9 @@ function Home() {
                                 </Flex>
                               </Flex>
                             </Stack>
-                          </CardBody>
-                        </Card>
-                      </Link>
+                          </Link>
+                        </CardBody>
+                      </Card>
                     )}
                   </motion.div>
                 );
