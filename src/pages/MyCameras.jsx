@@ -3,6 +3,7 @@ import Banner from '../components/Banner';
 import { getUserCamera } from '../api/cameras.api';
 import AddCamerasOverlay from './AddCamerasOverlay';
 import DeleteCamerasDialog from './DeleteCamerasDialog';
+import ImageCarousel from '../components/ImageCarousel';
 
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -13,7 +14,7 @@ import {
   Card,
   CardBody,
   Button,
-  Image,
+  Box,
   Text,
   Tooltip,
 } from '@chakra-ui/react';
@@ -55,11 +56,15 @@ function MyCameras() {
                   _hover={{ shadow: '2xl' }}
                 >
                   <CardBody>
-                    <Image
-                      src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                      alt="Green double couch with wooden legs"
-                      borderRadius="lg"
-                    />
+                    <Box
+                      key={camera._id}
+                      width="300px"
+                      height="300px"
+                      overflow="hidden"
+                      position="relative"
+                    >
+                      <ImageCarousel camera={camera} />
+                    </Box>
                     <Stack mt="6" spacing="3">
                       <Heading size="md">
                         {camera.brand} {camera.name}

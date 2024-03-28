@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 
 import Banner from '../components/Banner';
+import ImageCarousel from '../components/ImageCarousel';
 import { getAllCameras } from '../api/cameras.api';
 import { AuthContext } from '../context/auth.context';
 import {
@@ -12,7 +13,7 @@ import {
   Card,
   CardBody,
   Button,
-  Image,
+  Box,
   Text,
   Tooltip,
   SimpleGrid,
@@ -63,8 +64,15 @@ function Home() {
 
       <Stack p="20px">
         <Heading size="md">Latest additions</Heading>
-        <Stack ml="30" mr="30">
-          <SimpleGrid columns={3} p="5" spacing={4} overflowX="visible">
+        <Stack ml="30" mr="30" align="center">
+          <SimpleGrid
+            columns={3}
+            p="5"
+            minChildWidth="340px"
+            maxWidth="1150px"
+            spacing="40px"
+            overflowX="visible"
+          >
             {visibleCameras.map((camera, index) => {
               return (
                 <motion.div
@@ -78,13 +86,23 @@ function Home() {
                     stiffness: 100,
                   }}
                 >
-                  <Card maxW="sm" shadow="md" _hover={{ shadow: '2xl' }}>
+                  <Card
+                    key={camera._id}
+                    maxW="sm"
+                    shadow="md"
+                    background={useColorModeValue('gray.50', 'blackalpha.700')}
+                    _hover={{ shadow: '2xl' }}
+                  >
                     <CardBody>
-                      <Image
-                        src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
+                      <Box
+                        key={camera._id}
+                        width="300px"
+                        height="300px"
+                        overflow="hidden"
+                        position="relative"
+                      >
+                        <ImageCarousel camera={camera} />
+                      </Box>
                       <Stack mt="6" spacing="3">
                         <Heading size="md">
                           {camera.brand} {camera.name}
@@ -98,15 +116,17 @@ function Home() {
                           >
                             €{camera.price}
                           </Text>
-                          <Tooltip label="Send a message" fontSize="sm">
-                            <Button
-                              borderRadius="50%"
-                              variant="ghost"
-                              colorScheme="messenger"
-                            >
-                              <ChatIcon />
-                            </Button>
-                          </Tooltip>
+                          <Flex spacing="1" justify="flex-end">
+                            <Tooltip label="Send a message" fontSize="sm">
+                              <Button
+                                borderRadius="50%"
+                                variant="ghost"
+                                colorScheme="messenger"
+                              >
+                                <ChatIcon />
+                              </Button>
+                            </Tooltip>
+                          </Flex>
                         </Flex>
                       </Stack>
                     </CardBody>
