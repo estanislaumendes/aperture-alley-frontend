@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getCamera } from '../api/cameras.api';
+import { getUser } from '../api/cameras.api';
 import Banner from '../components/Banner';
 
 import {
@@ -23,14 +24,61 @@ import { ChatIcon } from '@chakra-ui/icons';
 
 function CameraDetails() {
   const [camera, setCamera] = useState(null);
+  const [user, setUser] = useState(null);
+  const [timeAgo, setTimeAgo] = useState(null);
   const { cameraId } = useParams();
 
   const getSingleCamera = async () => {
     try {
-      console.log(cameraId);
       const response = await getCamera(cameraId);
-      console.log(response.data);
-      setCamera(response.data);
+      const cameraData = response.data;
+
+      setCamera(cameraData);
+
+      // Calculate time difference
+      const createdAt = new Date(cameraData.createdAt);
+      const currentDate = new Date();
+      const differenceInMs = currentDate - createdAt;
+
+      // Convert milliseconds to days, hours, minutes, and seconds
+      const days = Math.floor(differenceInMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (differenceInMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (differenceInMs % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((differenceInMs % (1000 * 60)) / 1000);
+
+      // Construct the time ago string
+      let timeAgoString = '';
+      if (days > 0) {
+        timeAgoString += days + ' day(s) ';
+      }
+      if (hours > 0) {
+        timeAgoString += hours + ' hour(s) ';
+      }
+      if (minutes > 0) {
+        timeAgoString += minutes + ' minute(s) ';
+      }
+      if (seconds > 0) {
+        timeAgoString += seconds + ' second(s) ';
+      }
+
+      // Set time ago in state
+      setTimeAgo(timeAgoString);
+
+      getSingleUser(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getSingleUser = async userId => {
+    try {
+      const response = await getUser(userId);
+
+      setUser(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -50,7 +98,7 @@ function CameraDetails() {
             spacing={{ base: 8, md: 10 }}
             py={{ base: 18, md: 24 }}
           >
-            {camera && (
+            {camera && user && (
               <>
                 <Flex>
                   <Image
@@ -65,7 +113,7 @@ function CameraDetails() {
                     h={{ base: '100%', sm: '400px', lg: '500px' }}
                   />
                 </Flex>
-                <Stack spacing={{ base: 6, md: 10 }}>
+                <Stack spacing={{ base: 6, md: 5 }}>
                   <Box as={'header'}>
                     <Heading
                       lineHeight={1.1}
@@ -92,128 +140,70 @@ function CameraDetails() {
                       />
                     }
                   >
-                    <VStack spacing={{ base: 4, sm: 6 }}>
+                    <VStack align="left" spacing={{ base: 4, sm: 6 }}>
                       <Text
                         color={useColorModeValue('gray.500', 'gray.400')}
                         fontSize={'2xl'}
                         fontWeight={'300'}
                       >
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut labore
+                        Model {camera.model}
                       </Text>
+
                       <Text fontSize={'lg'}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Ad aliquid amet at delectus doloribus dolorum
-                        expedita hic, ipsum maxime modi nam officiis porro,
-                        quae, quisquam quos reprehenderit velit? Natus, totam.
+                        Format: <Text as="b"> {camera.format}</Text>
+                        <br />
+                        Cosmetic condition:{' '}
+                        <Text as="b"> {camera.condition} </Text>
                       </Text>
                     </VStack>
                     <Box>
                       <Text
                         fontSize={{ base: '16px', lg: '18px' }}
-                        color={useColorModeValue('yellow.500', 'yellow.300')}
+                        color={useColorModeValue('pink.500', 'pink.300')}
                         fontWeight={'500'}
                         textTransform={'uppercase'}
                         mb={'4'}
                       >
-                        Features
+                        What's Included
                       </Text>
-
-                      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-                        <List spacing={2}>
-                          <ListItem>Chronograph</ListItem>
-                          <ListItem>Master Chronometer Certified</ListItem>{' '}
-                          <ListItem>Tachymeter</ListItem>
-                        </List>
-                        <List spacing={2}>
-                          <ListItem>Anti‑magnetic</ListItem>
-                          <ListItem>Chronometer</ListItem>
-                          <ListItem>Small seconds</ListItem>
-                        </List>
-                      </SimpleGrid>
+                      <Text>{camera.whatsIncluded}</Text>
                     </Box>
                     <Box>
                       <Text
                         fontSize={{ base: '16px', lg: '18px' }}
-                        color={useColorModeValue('yellow.500', 'yellow.300')}
+                        color={useColorModeValue('pink.500', 'pink.300')}
                         fontWeight={'500'}
                         textTransform={'uppercase'}
                         mb={'4'}
                       >
-                        Product Details
+                        Seller Details
                       </Text>
 
                       <List spacing={2}>
                         <ListItem>
                           <Text as={'span'} fontWeight={'bold'}>
-                            Between lugs:
+                            Name:
                           </Text>{' '}
-                          20 mm
+                          {user.firstName} {user.lastName}
                         </ListItem>
                         <ListItem>
                           <Text as={'span'} fontWeight={'bold'}>
-                            Bracelet:
+                            Location:
                           </Text>{' '}
-                          leather strap
-                        </ListItem>
-                        <ListItem>
-                          <Text as={'span'} fontWeight={'bold'}>
-                            Case:
-                          </Text>{' '}
-                          Steel
-                        </ListItem>
-                        <ListItem>
-                          <Text as={'span'} fontWeight={'bold'}>
-                            Case diameter:
-                          </Text>{' '}
-                          42 mm
-                        </ListItem>
-                        <ListItem>
-                          <Text as={'span'} fontWeight={'bold'}>
-                            Dial color:
-                          </Text>{' '}
-                          Black
-                        </ListItem>
-                        <ListItem>
-                          <Text as={'span'} fontWeight={'bold'}>
-                            Crystal:
-                          </Text>{' '}
-                          Domed, scratch‑resistant sapphire crystal with
-                          anti‑reflective treatment inside
-                        </ListItem>
-                        <ListItem>
-                          <Text as={'span'} fontWeight={'bold'}>
-                            Water resistance:
-                          </Text>{' '}
-                          5 bar (50 metres / 167 feet){' '}
+                          {camera.location}
                         </ListItem>
                       </List>
                     </Box>
                   </Stack>
 
-                  <Button
-                    rounded={'none'}
-                    w={'full'}
-                    mt={8}
-                    size={'lg'}
-                    py={'7'}
-                    bg={useColorModeValue('gray.900', 'gray.50')}
-                    color={useColorModeValue('white', 'gray.900')}
-                    textTransform={'uppercase'}
-                    _hover={{
-                      transform: 'translateY(2px)',
-                      boxShadow: 'lg',
-                    }}
-                  >
-                    Add to cart
-                  </Button>
-
                   <Stack
                     direction="row"
                     alignItems="center"
                     justifyContent={'center'}
+                    fontSize={{ base: '10px', lg: '14px' }}
                   >
-                    <Text>2-3 business days delivery</Text>
+                    <Text>Created:</Text>
+                    <Text>{timeAgo} ago</Text>
                   </Stack>
                 </Stack>
               </>
