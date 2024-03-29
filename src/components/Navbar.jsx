@@ -25,7 +25,7 @@ function Navbar() {
   const { user, isLoggedIn, logoutUser } = useContext(AuthContext);
   return (
     <Flex
-      direction="row"
+      direction={{ base: 'column', md: 'row' }} // Stack columns in a column for small screens, row for medium and above
       as="nav"
       align="center"
       justify="space-between"

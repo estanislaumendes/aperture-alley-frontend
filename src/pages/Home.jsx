@@ -73,18 +73,18 @@ function Home() {
             <Spinner /> // Render spinner if isLoading is true
           ) : (
             <SimpleGrid
-              columns={3}
               p="5"
               minChildWidth="340px"
               maxWidth="1150px"
               spacing="40px"
               overflowX="visible"
+              className="grid-layout"
             >
               {visibleCameras.map((camera, index) => {
                 return (
                   <motion.div
                     key={camera._id}
-                    initial={{ opacity: 0, y: -500 }}
+                    initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
                       duration: 0.1,
@@ -151,7 +151,7 @@ function Home() {
               })}
             </SimpleGrid>
           )}
-          <HStack mt={4} spacing={4} justifyContent="center">
+          <HStack mt={4} spacing={{ base: 1, md: 4 }} justifyContent="center">
             {currentPage !== 1 && (
               <Button onClick={handlePrevPage}>Previous</Button>
             )}

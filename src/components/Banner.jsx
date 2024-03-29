@@ -12,7 +12,11 @@ function Banner() {
         justify="space-between"
       >
         <Stack p="20px">
-          <Heading size="lg" lineHeight="tall" color="white">
+          <Heading
+            size={{ base: 'sm', md: 'lg' }}
+            lineHeight="tall"
+            color="white"
+          >
             <Highlight
               query={['Buy', 'sell', 'trade']}
               styles={{ py: '1', color: 'yellow.300' }}
@@ -20,7 +24,7 @@ function Banner() {
               Buy, sell or trade used cameras
             </Highlight>
           </Heading>
-          <Heading size="sm" color="white">
+          <Heading size={{ base: 'xs', md: 'sm' }} color="white">
             Shop for all the used cameras you need. Message directly and get a
             deal with sellers
           </Heading>

@@ -9,3 +9,24 @@ body {
   font-size: 1rem;
   overflow-x: hidden;
 }
+
+/* For screens up to 768px (1 column layout) */
+@media screen and (max-width: 768px) {
+  .grid-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* For screens between 769px and 1024px (2 columns layout) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .grid-layout {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* For screens above 1024px (3 columns layout) */
+@media screen and (min-width: 1025px) {
+  .grid-layout {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
