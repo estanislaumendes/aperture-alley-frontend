@@ -5,6 +5,7 @@ import { getUser } from '../api/cameras.api';
 import Banner from '../components/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import fallbackImage from '../assets/fallback-camera.png';
 
 import {
   Flex,
@@ -29,7 +30,12 @@ function CameraDetails() {
   const [user, setUser] = useState(null);
   const [timeAgo, setTimeAgo] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [modelPhotos, setModelPhotos] = useState([]);
+  const [visiblePhotos, setVisiblePhotos] = useState([]);
+  const [page, setPage] = useState(1);
+  const photosPerPage = 8;
   const { cameraId } = useParams();
+  const apiKey = import.meta.env.VITE_FLICKR_KEY;
 
   const navigateToPreviousImage = () => {
     setCurrentImageIndex(prevIndex =>
@@ -101,7 +107,42 @@ function CameraDetails() {
 
   useEffect(() => {
     getSingleCamera();
-  }, []);
+  }, [cameraId]);
+
+  useEffect(() => {
+    if (camera && camera.model) {
+      const fetchModelPhotos = async () => {
+        try {
+          // Fetch photos from Flickr API based on camera model
+          const response = await fetch(
+            `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&format=json&nojsoncallback=1&text=${camera.model}`
+          );
+          if (!response.ok) {
+            throw new Error('Failed to fetch model photos');
+          }
+
+          const data = await response.json();
+
+          if (data.photos && data.photos.photo) {
+            setModelPhotos(prevPhotos => [...prevPhotos, ...data.photos.photo]);
+          }
+        } catch (error) {
+          console.error('Error fetching model photos:', error);
+        }
+      };
+
+      fetchModelPhotos();
+    }
+  }, [camera]);
+
+  useEffect(() => {
+    // Update visiblePhotos when photos change or page changes
+    setVisiblePhotos(modelPhotos.slice(0, photosPerPage * page));
+  }, [modelPhotos, page]);
+
+  const handleShowMore = () => {
+    setPage(prevPage => prevPage + 1);
+  };
 
   return (
     <>
@@ -119,7 +160,11 @@ function CameraDetails() {
                   <Image
                     rounded={'md'}
                     alt={'product image'}
-                    src={camera.img[currentImageIndex]}
+                    src={
+                      camera.img.length > 0
+                        ? camera.img[currentImageIndex]
+                        : fallbackImage
+                    }
                     fit={'cover'}
                     align={'center'}
                     w={'100%'}
@@ -240,6 +285,50 @@ function CameraDetails() {
             </SimpleGrid>
           </Container>
         )}
+      </Stack>
+      <Stack
+        alignItems="center"
+        spacing={{ base: 4, sm: 6 }}
+        direction={'column'}
+        divider={
+          <StackDivider
+            borderColor={useColorModeValue('gray.200', 'gray.600')}
+          />
+        }
+      >
+        <Text
+          color={useColorModeValue('gray.500', 'gray.400')}
+          fontSize={'xl'}
+          fontWeight={'300'}
+        >
+          The pictures below were taken with the same model
+        </Text>
+        {/* Model Photos */}
+        <Container maxW={'7xl'} mt={8}>
+          <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
+            {Array.isArray(modelPhotos) &&
+              visiblePhotos.map(photo => (
+                <img
+                  key={photo.id}
+                  src={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
+                  alt={photo.title}
+                />
+              ))}
+            {/* Display a loading message if modelPhotos is null */}
+            {modelPhotos === null && <p>Loading...</p>}
+            {/* Display an error message if modelPhotos is not an array */}
+            {!Array.isArray(modelPhotos) && modelPhotos !== null && (
+              <Text>Error: Couldn't find any photo</Text>
+            )}
+          </SimpleGrid>
+          {visiblePhotos.length < modelPhotos.length && (
+            <Stack align="center">
+              <Button mt={4} mb={4} onClick={handleShowMore}>
+                Show More
+              </Button>
+            </Stack>
+          )}
+        </Container>
       </Stack>
     </>
   );
