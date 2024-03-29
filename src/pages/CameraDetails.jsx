@@ -195,7 +195,7 @@ function CameraDetails() {
                       fontWeight={600}
                       fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}
                     >
-                      {camera.brand} {camera.name}
+                      {camera.name}
                     </Heading>
                     <Text
                       color={useColorModeValue('gray.900', 'gray.400')}

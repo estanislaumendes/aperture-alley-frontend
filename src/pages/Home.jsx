@@ -116,9 +116,7 @@ function Home() {
                           </Box>
                           <Link to={`/cameras/${camera._id}`}>
                             <Stack mt="6" spacing="3">
-                              <Heading size="md">
-                                {camera.brand} {camera.name}
-                              </Heading>
+                              <Heading size="md">{camera.name}</Heading>
                               <Text as="sup">{camera.model}</Text>
                               <Text>Condition: {camera.condition} </Text>
                               <Flex justify="space-between">
