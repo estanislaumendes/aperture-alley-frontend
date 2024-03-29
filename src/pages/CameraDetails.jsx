@@ -122,7 +122,7 @@ function CameraDetails() {
           }
 
           const data = await response.json();
-
+          /* console.log('data', data); */
           if (data.photos && data.photos.photo) {
             setModelPhotos(prevPhotos => [...prevPhotos, ...data.photos.photo]);
           }
@@ -305,22 +305,22 @@ function CameraDetails() {
         </Text>
         {/* Model Photos */}
         <Container maxW={'7xl'} mt={8}>
-          <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
-            {Array.isArray(modelPhotos) &&
-              visiblePhotos.map(photo => (
-                <img
-                  key={photo.id}
-                  src={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
-                  alt={photo.title}
-                />
-              ))}
-            {/* Display a loading message if modelPhotos is null */}
-            {modelPhotos === null && <p>Loading...</p>}
-            {/* Display an error message if modelPhotos is not an array */}
-            {!Array.isArray(modelPhotos) && modelPhotos !== null && (
-              <Text>Error: Couldn't find any photo</Text>
-            )}
-          </SimpleGrid>
+          {modelPhotos.length !== 0 ? (
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={4}>
+              {Array.isArray(modelPhotos) &&
+                visiblePhotos.map(photo => (
+                  <img
+                    key={photo.id}
+                    src={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
+                    alt={photo.title}
+                  />
+                ))}
+            </SimpleGrid>
+          ) : (
+            <Stack align="center" mb={4}>
+              <Text as="mark">Error: Couldn't find any photo</Text>
+            </Stack>
+          )}
           {visiblePhotos.length < modelPhotos.length && (
             <Stack align="center">
               <Button mt={4} mb={4} onClick={handleShowMore}>
