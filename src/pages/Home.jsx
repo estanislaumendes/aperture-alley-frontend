@@ -18,6 +18,7 @@ import {
   Text,
   Tooltip,
   SimpleGrid,
+  VStack,
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
@@ -67,89 +68,94 @@ function Home() {
       <Banner />
 
       <Stack p="20px">
-        <Heading size="md">Latest additions</Heading>
         <Stack ml="30" mr="30" align="center">
           {isLoading ? (
             <Spinner /> // Render spinner if isLoading is true
           ) : (
-            <SimpleGrid
-              p="5"
-              minChildWidth="340px"
-              maxWidth="1150px"
-              spacing="40px"
-              overflowX="visible"
-              className="grid-layout"
-            >
-              {visibleCameras.map((camera, index) => {
-                return (
-                  <motion.div
-                    key={camera._id}
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.1,
-                      delay: index * 0.1,
-                      type: 'spring',
-                      stiffness: 100,
-                    }}
-                  >
-                    {camera && (
-                      <Card
-                        key={camera._id}
-                        maxW="sm"
-                        shadow="md"
-                        background={useColorModeValue(
-                          'gray.50',
-                          'blackalpha.700'
-                        )}
-                        _hover={{ shadow: '2xl' }}
-                      >
-                        <CardBody>
-                          <Box
-                            key={camera._id}
-                            width="300px"
-                            height="300px"
-                            overflow="hidden"
-                            position="relative"
-                          >
-                            <ImageCarousel camera={camera} />
-                          </Box>
-                          <Link to={`/cameras/${camera._id}`}>
-                            <Stack mt="6" spacing="3">
-                              <Heading size="md">{camera.name}</Heading>
-                              <Text as="sup">{camera.model}</Text>
-                              <Text>Condition: {camera.condition} </Text>
-                              <Flex justify="space-between">
-                                <Text
-                                  color={useColorModeValue(
-                                    'blue.600',
-                                    'pink.200'
-                                  )}
-                                  fontSize="2xl"
-                                >
-                                  €{camera.price}
-                                </Text>
-                                <Flex spacing="1" justify="flex-end">
-                                  <Tooltip label="Send a message" fontSize="sm">
-                                    <Button
-                                      borderRadius="50%"
-                                      variant="ghost"
-                                      colorScheme="messenger"
+            <VStack align="flex-start">
+              <Heading size="md">Latest additions</Heading>
+              <SimpleGrid
+                p="5"
+                minChildWidth="340px"
+                maxWidth="1150px"
+                spacing="40px"
+                overflowX="visible"
+                className="grid-layout"
+              >
+                {visibleCameras.map((camera, index) => {
+                  return (
+                    <motion.div
+                      key={camera._id}
+                      initial={{ opacity: 0, y: -50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.1,
+                        delay: index * 0.1,
+                        type: 'spring',
+                        stiffness: 100,
+                      }}
+                    >
+                      {camera && (
+                        <Card
+                          key={camera._id}
+                          maxW="sm"
+                          shadow="md"
+                          background={useColorModeValue(
+                            'gray.50',
+                            'blackalpha.700'
+                          )}
+                          _hover={{ shadow: '2xl' }}
+                        >
+                          <CardBody>
+                            <Box
+                              key={camera._id}
+                              width="300px"
+                              height="300px"
+                              overflow="hidden"
+                              position="relative"
+                            >
+                              <ImageCarousel camera={camera} />
+                            </Box>
+                            <Link to={`/cameras/${camera._id}`}>
+                              <Stack mt="6" spacing="3">
+                                <Heading size="md">{camera.name}</Heading>
+                                <Text as="sup">{camera.model}</Text>
+                                <Text>Condition: {camera.condition} </Text>
+                                <Flex justify="space-between">
+                                  <Text
+                                    color={useColorModeValue(
+                                      'blue.600',
+                                      'pink.200'
+                                    )}
+                                    fontSize="2xl"
+                                  >
+                                    €{camera.price}
+                                  </Text>
+                                  <Flex spacing="1" justify="flex-end">
+                                    <Tooltip
+                                      label="Send a message"
+                                      fontSize="sm"
                                     >
-                                      <ChatIcon />
-                                    </Button>
-                                  </Tooltip>
+                                      <Button
+                                        borderRadius="50%"
+                                        variant="ghost"
+                                        colorScheme="messenger"
+                                      >
+                                        <ChatIcon />
+                                      </Button>
+                                    </Tooltip>
+                                  </Flex>
                                 </Flex>
-                              </Flex>
-                            </Stack>
-                          </Link>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </SimpleGrid>
+                              </Stack>
+                            </Link>
+                          </CardBody>
+                        </Card>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </SimpleGrid>
+            </VStack>
           )}
           <HStack mt={4} spacing={{ base: 1, md: 4 }} justifyContent="center">
             {currentPage !== 1 && (

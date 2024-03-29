@@ -9,6 +9,8 @@ import IsAnon from './components/isAnon';
 import Footer from './components/Footer';
 import CameraDetails from './pages/CameraDetails';
 
+import { Container } from '@chakra-ui/react';
+
 function App() {
   return (
     <>

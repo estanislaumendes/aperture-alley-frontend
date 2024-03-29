@@ -17,6 +17,7 @@ import {
   Box,
   Text,
   Tooltip,
+  VStack,
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import EditCamerasOverlay from './EditCamerasOverlay';
@@ -42,11 +43,18 @@ function MyCameras() {
   return (
     <>
       <Banner />
-      <Stack p="20px">
-        <AddCamerasOverlay userId={user._id} getCameras={getCameras} />
-
-        <Stack ml="30" mr="30">
-          <Flex mt="6" gap="2" flexWrap="wrap" justifyContent="flex-start">
+      <VStack p="20px">
+        <Stack
+          ml="30"
+          mr="30"
+          align="center"
+          minChildWidth="340px"
+          maxWidth="1150px"
+        >
+          <Stack alignSelf="flex-start">
+            <AddCamerasOverlay userId={user._id} getCameras={getCameras} />
+          </Stack>
+          <Flex mt="6" gap="40px" flexWrap="wrap" justifyContent="flex-start">
             {cameras.map(camera => {
               return (
                 <Card
@@ -100,7 +108,7 @@ function MyCameras() {
             })}
           </Flex>
         </Stack>
-      </Stack>
+      </VStack>
     </>
   );
 }

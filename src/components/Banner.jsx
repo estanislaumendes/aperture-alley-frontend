@@ -9,7 +9,8 @@ function Banner() {
         h="200px"
         align="center"
         bgGradient="linear(to-l, #FF0080, #7928CA)"
-        justify="space-between"
+        justify="center"
+        gap={[0, 10, 40]}
       >
         <Stack p="20px">
           <Heading

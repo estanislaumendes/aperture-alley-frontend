@@ -28,7 +28,7 @@ function Navbar() {
       direction={{ base: 'column', md: 'row' }} // Stack columns in a column for small screens, row for medium and above
       as="nav"
       align="center"
-      justify="space-between"
+      justify="center"
       bg="#1A365D"
       pr={[0, 3, 15]}
     >

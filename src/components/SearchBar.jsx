@@ -57,7 +57,7 @@ function SearchBar() {
   };
 
   return (
-    <Flex direction="column" flex="1" minW="fit-content" position="relative">
+    <Flex direction="column" w="35%" minW="fit-content" position="relative">
       <InputGroup direction="row">
         <InputLeftElement pointerEvents="none">
           <Search2Icon color="gray.300" />
