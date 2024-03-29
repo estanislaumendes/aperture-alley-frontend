@@ -18,8 +18,11 @@ const setAuthorizationHeaders = () => {
 
 setAuthorizationHeaders();
 
-export const getAllCameras = () => {
-  return axios.get(`${baseURL}/cameras`);
+export const getAllCameras = (searchQuery = '') => {
+  const url = searchQuery
+    ? `${baseURL}/cameras?search=${encodeURIComponent(searchQuery)}`
+    : `${baseURL}/cameras`;
+  return axios.get(url);
 };
 
 export const getCamera = id => {

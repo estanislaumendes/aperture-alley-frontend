@@ -1,4 +1,5 @@
 import { NavLink, Link } from 'react-router-dom';
+import SearchBar from './SearchBar';
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
 import logoUrl from '../assets/camera-no-bg.png';
@@ -11,9 +12,6 @@ import {
   Stack,
   useColorMode,
   Avatar,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Menu,
   MenuList,
   MenuItem,
@@ -21,7 +19,6 @@ import {
   MenuDivider,
   Button,
 } from '@chakra-ui/react';
-import { Search2Icon } from '@chakra-ui/icons';
 
 function Navbar() {
   const { toggleColorMode } = useColorMode();
@@ -49,20 +46,10 @@ function Navbar() {
           </Heading>
         </NavLink>
       </HStack>
-      <HStack width="50%">
-        <InputGroup direction="row">
-          <InputLeftElement pointerEvents="none">
-            <Search2Icon color="gray.300" />
-          </InputLeftElement>
-          <Input
-            variant="filled"
-            type="search"
-            placeholder="Search for Camera"
-          />
-        </InputGroup>
-      </HStack>
 
-      <Stack direction="row" align="center" spacing="20px">
+      <SearchBar />
+
+      <Stack direction="row" pl="20px" align="center" spacing="20px">
         <Switch
           onChange={toggleColorMode}
           colorScheme="pink"

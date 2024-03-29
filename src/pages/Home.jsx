@@ -34,7 +34,7 @@ function Home() {
     try {
       setIsLoading(true);
       const response = await getAllCameras();
-      //console.log(response);
+
       setCameras(response.data);
     } catch (error) {
       console.log(error);
