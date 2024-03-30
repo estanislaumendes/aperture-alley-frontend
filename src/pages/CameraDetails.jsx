@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getCamera } from '../api/cameras.api';
 import { getUser } from '../api/cameras.api';
 import Banner from '../components/Banner';
+import Spinner from '../components/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import fallbackImage from '../assets/fallback-camera.png';
@@ -318,7 +319,8 @@ function CameraDetails() {
             </SimpleGrid>
           ) : (
             <Stack align="center" mb={4}>
-              <Text as="mark">Error: Couldn't find any photo</Text>
+              <Spinner />
+              {/* <Text as="mark">Error: Couldn't find any photo</Text> */}
             </Stack>
           )}
           {visiblePhotos.length < modelPhotos.length && (

@@ -4,7 +4,7 @@ import { getUserCamera } from '../api/cameras.api';
 import AddCamerasOverlay from './AddCamerasOverlay';
 import DeleteCamerasDialog from './DeleteCamerasDialog';
 import ImageCarousel from '../components/ImageCarousel';
-
+import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/auth.context';
 import {
@@ -73,35 +73,37 @@ function MyCameras() {
                     >
                       <ImageCarousel camera={camera} />
                     </Box>
-                    <Stack mt="6" spacing="3">
-                      <Heading size="md">{camera.name}</Heading>
-                      <Text as="sup">{camera.model}</Text>
-                      <Text>Condition: {camera.condition} </Text>
-                      <Flex justify="space-between">
-                        <Text color="blue.600" fontSize="2xl">
-                          €{camera.price}
-                        </Text>
-                        <Flex spacing="1" justify="flex-end">
-                          <Tooltip label="Send a message" fontSize="sm">
-                            <Button
-                              borderRadius="50%"
-                              variant="ghost"
-                              colorScheme="messenger"
-                            >
-                              <ChatIcon />
-                            </Button>
-                          </Tooltip>
-                          <EditCamerasOverlay
-                            cameraId={camera._id}
-                            getCameras={getCameras}
-                          />
-                          <DeleteCamerasDialog
-                            cameraId={camera._id}
-                            getCameras={getCameras}
-                          />
+                    <Link to={`/cameras/${camera._id}`}>
+                      <Stack mt="6" spacing="3">
+                        <Heading size="md">{camera.name}</Heading>
+                        <Text as="sup">{camera.model}</Text>
+                        <Text>Condition: {camera.condition} </Text>
+                        <Flex justify="space-between">
+                          <Text color="blue.600" fontSize="2xl">
+                            €{camera.price}
+                          </Text>
+                          <Flex spacing="1" justify="flex-end">
+                            <Tooltip label="Send a message" fontSize="sm">
+                              <Button
+                                borderRadius="50%"
+                                variant="ghost"
+                                colorScheme="messenger"
+                              >
+                                <ChatIcon />
+                              </Button>
+                            </Tooltip>
+                            <EditCamerasOverlay
+                              cameraId={camera._id}
+                              getCameras={getCameras}
+                            />
+                            <DeleteCamerasDialog
+                              cameraId={camera._id}
+                              getCameras={getCameras}
+                            />
+                          </Flex>
                         </Flex>
-                      </Flex>
-                    </Stack>
+                      </Stack>
+                    </Link>
                   </CardBody>
                 </Card>
               );
