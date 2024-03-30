@@ -260,7 +260,10 @@ function CameraDetails() {
                           <Text as={'span'} fontWeight={'bold'}>
                             Name:
                           </Text>{' '}
-                          {user.firstName} {user.lastName}
+                          {user.firstName.charAt(0).toUpperCase()}
+                          {user.firstName.slice(1)}{' '}
+                          {user.lastName.charAt(0).toUpperCase()}
+                          {user.lastName.slice(1)}
                         </ListItem>
                         <ListItem>
                           <Text as={'span'} fontWeight={'bold'}>

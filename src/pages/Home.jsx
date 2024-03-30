@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import Banner from '../components/Banner';
 import ImageCarousel from '../components/ImageCarousel';
-
+import { AuthContext } from '../context/auth.context';
 import {
   HStack,
   useColorModeValue,
@@ -22,8 +22,10 @@ import {
 } from '@chakra-ui/react';
 import { ChatIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
+import ChatOverlay from './ChatOverlay';
 
 function Home() {
+  const { user, isLoggedIn } = useContext(AuthContext);
   const [cameras, setCameras] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -116,38 +118,34 @@ function Home() {
                             >
                               <ImageCarousel camera={camera} />
                             </Box>
-                            <Link to={`/cameras/${camera._id}`}>
-                              <Stack mt="6" spacing="3">
+                            <Stack mt="6" spacing="3">
+                              <Link to={`/cameras/${camera._id}`}>
                                 <Heading size="md">{camera.name}</Heading>
                                 <Text as="sup">{camera.model}</Text>
                                 <Text>Condition: {camera.condition} </Text>
-                                <Flex justify="space-between">
-                                  <Text
-                                    color={useColorModeValue(
-                                      'blue.600',
-                                      'pink.200'
-                                    )}
-                                    fontSize="2xl"
-                                  >
-                                    €{camera.price}
-                                  </Text>
-                                  <Flex spacing="1" justify="flex-end">
-                                    <Tooltip
-                                      label="Send a message"
-                                      fontSize="sm"
-                                    >
-                                      <Button
-                                        borderRadius="50%"
-                                        variant="ghost"
-                                        colorScheme="messenger"
-                                      >
-                                        <ChatIcon />
-                                      </Button>
-                                    </Tooltip>
-                                  </Flex>
+                              </Link>
+                              <Flex justify="space-between">
+                                <Text
+                                  color={useColorModeValue(
+                                    'blue.600',
+                                    'pink.200'
+                                  )}
+                                  fontSize="2xl"
+                                >
+                                  €{camera.price}
+                                </Text>
+                                <Flex spacing="1" justify="flex-end">
+                                  {isLoggedIn && user._id !== camera.user ? (
+                                    <ChatOverlay
+                                      userId={user._id}
+                                      receiverId={camera.user}
+                                    />
+                                  ) : (
+                                    <></>
+                                  )}
                                 </Flex>
-                              </Stack>
-                            </Link>
+                              </Flex>
+                            </Stack>
                           </CardBody>
                         </Card>
                       )}
